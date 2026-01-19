@@ -1,0 +1,16 @@
+[
+  {
+    "Id": "t1",
+    "Name": "Aurora Summit 2",
+    "Brand": "Sleep Outside",
+    "Price": 199.99,
+    "Image": "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "Id": "t2",
+    "Name": "Pioneer Ridge 3",
+    "Brand": "Sleep Outside",
+    "Price": 249.99,
+    "Image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80"
+  }
+]
