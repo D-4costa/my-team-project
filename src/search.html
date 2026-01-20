@@ -1,84 +1,98 @@
-<body>
-  <header class="site-header">
-    <h1>Sleep Outside</h1>
-    <nav class="main-nav">
-      <a href="./index.html">Home</a>
-      <a href="./search.html" class="active">Search</a>
-    </nav>
-  </header>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sleep Outside | Search</title>
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
 
-  <main class="search-container">
-    <section class="search-header">
-      <h2>Find Your Outdoor Gear</h2>
-      <p class="search-subtitle">
-        Search sleeping bags, tents, and outdoor essentials
+  <body>
+    <header class="divider">
+      <div class="logo">
+        <a href="./index.html">
+          Sleep <span class="highlight">Outside</span>
+        </a>
+      </div>
+      <nav>
+        <a href="./index.html">Home</a>
+        <a href="./search.html">Search</a>
+      </nav>
+    </header>
+
+    <main class="products">
+      <h2 class="divider">Search Products</h2>
+
+      <p>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search by name or brand"
+          aria-label="Search products"
+        />
       </p>
 
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Search by name or brand"
-        class="search-input"
-      />
-    </section>
-
-    <section class="search-results">
       <ul class="product-list"></ul>
-    </section>
-  </main>
+    </main>
 
-  <script type="module">
-    import ProductData from "./ProductData.mjs";
-    import { renderListWithTemplate } from "./utils.mjs";
+    <footer>
+      <p>&copy; Sleep Outside</p>
+    </footer>
 
-    const dataSource = new ProductData("tents");
-    const listElement = document.querySelector(".product-list");
-    const searchInput = document.querySelector("#searchInput");
+    <script type="module">
+      import ProductData from "./ProductData.mjs";
+      import { renderListWithTemplate } from "./utils.mjs";
 
-    function productTemplate(product) {
-      return `
-        <li class="product-card">
-          <img src="${product.Image}" alt="${product.Name}" />
-          <h3>${product.Name}</h3>
-          <p class="brand">${product.Brand}</p>
-          <p class="price">$${product.Price}</p>
-        </li>
-      `;
-    }
+      const dataSource = new ProductData("tents");
+      const listElement = document.querySelector(".product-list");
+      const searchInput = document.querySelector("#searchInput");
 
-    let allProducts = [];
+      function productTemplate(product) {
+        return `
+          <li class="product-card">
+            <img src="${product.Image}" alt="${product.Name}" />
+            <p class="card__brand">${product.Brand}</p>
+            <h3 class="card__name">${product.Name}</h3>
+            <p class="highlight">$${product.Price}</p>
+          </li>
+        `;
+      }
 
-    async function loadProducts() {
-      allProducts = await dataSource.getData();
-      renderProducts(allProducts);
-    }
+      let allProducts = [];
 
-    function renderProducts(products) {
-      renderListWithTemplate(
-        productTemplate,
-        listElement,
-        products,
-        "afterbegin",
-        true
-      );
-    }
+      async function loadProducts() {
+        allProducts = await dataSource.getData();
+        renderProducts(allProducts);
+      }
 
-    function filterProducts(searchTerm) {
-      const filtered = allProducts.filter((product) => {
-        return (
-          product.Name.toLowerCase().includes(searchTerm) ||
-          product.Brand.toLowerCase().includes(searchTerm)
+      function renderProducts(products) {
+        renderListWithTemplate(
+          productTemplate,
+          listElement,
+          products,
+          "afterbegin",
+          true
         );
+      }
+
+      function filterProducts(searchTerm) {
+        const filtered = allProducts.filter((product) => {
+          return (
+            product.Name.toLowerCase().includes(searchTerm) ||
+            product.Brand.toLowerCase().includes(searchTerm)
+          );
+        });
+
+        renderProducts(filtered);
+      }
+
+      searchInput.addEventListener("input", (event) => {
+        filterProducts(event.target.value.toLowerCase());
       });
 
-      renderProducts(filtered);
-    }
+      loadProducts();
+    </script>
+  </body>
+</html>
 
-    searchInput.addEventListener("input", (e) => {
-      filterProducts(e.target.value.toLowerCase());
-    });
-
-    loadProducts();
-  </script>
-</body>
 
