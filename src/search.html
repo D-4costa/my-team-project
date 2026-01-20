@@ -1,86 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sleep Outside | Search</title>
-  </head>
+<body>
+  <header class="site-header">
+    <h1>Sleep Outside</h1>
+    <nav class="main-nav">
+      <a href="./index.html">Home</a>
+      <a href="./search.html" class="active">Search</a>
+    </nav>
+  </header>
 
-  <body>
-    <header>
-      <h1>Sleep Outside</h1>
-      <nav>
-        <a href="./index.html">Home</a>
-        <a href="./search.html">Search</a>
-      </nav>
-    </header>
+  <main class="search-container">
+    <section class="search-header">
+      <h2>Find Your Outdoor Gear</h2>
+      <p class="search-subtitle">
+        Search sleeping bags, tents, and outdoor essentials
+      </p>
 
-    <main>
-      <h2>Search Products</h2>
-
-      <!-- Search input -->
       <input
         type="text"
         id="searchInput"
         placeholder="Search by name or brand"
+        class="search-input"
       />
+    </section>
 
-      <!-- Product list -->
+    <section class="search-results">
       <ul class="product-list"></ul>
-    </main>
+    </section>
+  </main>
 
-    <script type="module">
-      import ProductData from "./ProductData.mjs";
-      import { renderListWithTemplate } from "./utils.mjs";
+  <script type="module">
+    import ProductData from "./ProductData.mjs";
+    import { renderListWithTemplate } from "./utils.mjs";
 
-      const dataSource = new ProductData("tents");
-      const listElement = document.querySelector(".product-list");
-      const searchInput = document.querySelector("#searchInput");
+    const dataSource = new ProductData("tents");
+    const listElement = document.querySelector(".product-list");
+    const searchInput = document.querySelector("#searchInput");
 
-      function productTemplate(product) {
-        return `
-          <li class="product-card">
-            <img src="${product.Image}" alt="${product.Name}" />
-            <h3>${product.Name}</h3>
-            <p>${product.Brand}</p>
-            <p>$${product.Price}</p>
-          </li>
-        `;
-      }
+    function productTemplate(product) {
+      return `
+        <li class="product-card">
+          <img src="${product.Image}" alt="${product.Name}" />
+          <h3>${product.Name}</h3>
+          <p class="brand">${product.Brand}</p>
+          <p class="price">$${product.Price}</p>
+        </li>
+      `;
+    }
 
-      let allProducts = [];
+    let allProducts = [];
 
-      async function loadProducts() {
-        allProducts = await dataSource.getData();
-        renderProducts(allProducts);
-      }
+    async function loadProducts() {
+      allProducts = await dataSource.getData();
+      renderProducts(allProducts);
+    }
 
-      function renderProducts(products) {
-        renderListWithTemplate(
-          productTemplate,
-          listElement,
-          products,
-          "afterbegin",
-          true
+    function renderProducts(products) {
+      renderListWithTemplate(
+        productTemplate,
+        listElement,
+        products,
+        "afterbegin",
+        true
+      );
+    }
+
+    function filterProducts(searchTerm) {
+      const filtered = allProducts.filter((product) => {
+        return (
+          product.Name.toLowerCase().includes(searchTerm) ||
+          product.Brand.toLowerCase().includes(searchTerm)
         );
-      }
-
-      function filterProducts(searchTerm) {
-        const filtered = allProducts.filter((product) => {
-          return (
-            product.Name.toLowerCase().includes(searchTerm) ||
-            product.Brand.toLowerCase().includes(searchTerm)
-          );
-        });
-
-        renderProducts(filtered);
-      }
-
-      searchInput.addEventListener("input", (e) => {
-        filterProducts(e.target.value.toLowerCase());
       });
 
-      loadProducts();
-    </script>
-  </body>
-</html>
+      renderProducts(filtered);
+    }
+
+    searchInput.addEventListener("input", (e) => {
+      filterProducts(e.target.value.toLowerCase());
+    });
+
+    loadProducts();
+  </script>
+</body>
+
